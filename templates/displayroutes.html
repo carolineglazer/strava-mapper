@@ -1,0 +1,38 @@
+<!doctype html>
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+	<script type="text/javascript" src="https://rawgit.com/jieter/Leaflet.encoded/master/Polyline.encoded.js"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    <h2>Kudos!</h2>
+
+    <div id="mapid">
+        <script type="text/javascript">
+            
+            var map = L.map('mapid').setView([37.45,-122.30],13);
+            L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+        const jsArrayOfItems = {{encoded_routes | safe}};
+        
+        //for (var encoded in jsArrayOfItems) {
+        for (let encoded of jsArrayOfItems) {
+            var coordinates = L.Polyline.fromEncoded(encoded).getLatLngs();
+
+            L.polyline(
+            coordinates, {
+                color: 'blue',
+                weight: 2,
+                lineJoin: 'round'
+            }
+            ).addTo(map);
+        }
+
+        </script>
+    </div>
+<body>
