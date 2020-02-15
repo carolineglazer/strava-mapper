@@ -156,6 +156,7 @@ def displayroutes():
 				activity_response = requests.get(uri, headers=headers, data=body)
 				activity = activity_response.json()
 				selected_routes[str(activity["id"])] = str(activity["map"]["summary_polyline"])
+				selected_names[str(activity["id"])] = str(activity["name"])
 			except:
 				pass
 
