@@ -124,10 +124,7 @@ def callback():
 	activity_ids = {}
 	for i in user_activities:
 		activity_ids[str(i["id"])] = str(i["name"])
-
-	#Get the Athlete ID from the first activity
-	athlete_id = user_activities[0]["athlete"]["id"]
-
+		
 	#Hit /athlete to get the athlete's info
 	athlete_endpoint = ("https://www.strava.com/api/v3/athlete")
 	uri, headers, body = client.add_token(athlete_endpoint)
@@ -147,8 +144,14 @@ def displayroutes():
 		selected_ids = list(request.form.items())
 
 		#Hit /activites/[id] with every activity id checked in /routes
-		#Produce selected_routes: id x polyline
+		#Produce selected_routes: id x polyline, selected_names: id x name, 
+		#selected_dist: id x distance, selected_vert: id x elevation,
+		#selected_dates: id x date
 		selected_routes = {}
+		selected_names = {}
+		selected_dist = {}
+		selected_vert = {}
+		selected_dates = {}
 		for i in selected_ids:
 			try:
 				activityids_endpoint = "https://www.strava.com/api/v3/activities/" + i[0]
@@ -157,6 +160,9 @@ def displayroutes():
 				activity = activity_response.json()
 				selected_routes[str(activity["id"])] = str(activity["map"]["summary_polyline"])
 				selected_names[str(activity["id"])] = str(activity["name"])
+				selected_dist[str(activity["id"])] = float(str(round((activity["distance"]/1609.34),2)))
+				selected_vert[str(activity["id"])] = float(str(round((activity["total_elevation_gain"]*3.28),2)))
+				selected_dates[str(activity["id"])] = activity["start_date"]
 			except:
 				pass
 
@@ -165,8 +171,9 @@ def displayroutes():
 		for i in selected_routes:
 			#reformatted = selected_routes[i].replace("\\","\\\\")
 			encoded_routes.append(selected_routes[i])
+			#encoded_routes.append(reformatted)
 
-		return render_template('displayroutes.html', selected_routes=selected_routes, encoded_routes=encoded_routes)
+		return render_template('displayroutes.html', selected_routes=selected_routes, encoded_routes=encoded_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
 
 if __name__ == '__main__':
 	app.run()
