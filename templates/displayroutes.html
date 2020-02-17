@@ -1,26 +1,48 @@
 <!doctype html>
 <head>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
 	<script type="text/javascript" src="https://rawgit.com/jieter/Leaflet.encoded/master/Polyline.encoded.js"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!--<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400">
 </head>
 
 <body>
-    <h2>Kudos!</h2>
-
+    <table>
+        <tr>
+            <th colspan="4">Activities</th>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <th>Distance (miles)</th>
+            <th>Vertical (feet)</th>
+            <th>Date</th>
+        </tr>
+        {% for item in selected_routes %}
+            <tr>
+                <td>{{names[item]}}</td>
+                <td>{{dist[item]}}</td>
+                <td>{{vert[item]}}</td>
+                <td>{{dates[item]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
     <div id="mapid">
         <script type="text/javascript">
             
             var map = L.map('mapid').setView([37.45,-122.30],13);
             L.tileLayer(
-            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-            }).addTo(map);
-
+            'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+            ).addTo(map);
+            
         const jsArrayOfItems = {{encoded_routes | safe}};
         
-        //for (var encoded in jsArrayOfItems) {
         for (let encoded of jsArrayOfItems) {
             var coordinates = L.Polyline.fromEncoded(encoded).getLatLngs();
 
@@ -32,7 +54,7 @@
             }
             ).addTo(map);
         }
-
+        
         </script>
     </div>
 <body>
