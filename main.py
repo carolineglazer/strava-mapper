@@ -161,8 +161,8 @@ def displayroutes():
 				selected_routes[str(activity["id"])] = str(activity["map"]["summary_polyline"])
 				selected_names[str(activity["id"])] = str(activity["name"])
 				selected_dist[str(activity["id"])] = float(str(round((activity["distance"]/1609.34),2)))
-				selected_vert[str(activity["id"])] = float(str(round((activity["total_elevation_gain"]*3.28),0)))
-				selected_dates[str(activity["id"])] = activity["start_date"]
+				selected_vert[str(activity["id"])] = int(str(round((activity["total_elevation_gain"]*3.28))))
+				selected_dates[str(activity["id"])] = activity["start_date"][5:7]+"/"+activity["start_date"][8:10]+"/"+activity["start_date"][:4]
 			except:
 				pass
 
