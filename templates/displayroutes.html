@@ -7,7 +7,7 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
 	<script type="text/javascript" src="https://rawgit.com/jieter/Leaflet.encoded/master/Polyline.encoded.js"></script>
-    <!--<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>-->
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400">
 </head>
@@ -15,7 +15,7 @@
 <body>
     <table>
         <tr>
-            <th colspan="4">Activities</th>
+            <h1><th colspan="4">Activities</th></h1>
         </tr>
         <tr>
             <th>Name</th>
@@ -25,21 +25,27 @@
         </tr>
         {% for item in selected_routes %}
             <tr>
-                <td>{{names[item]}}</td>
-                <td>{{dist[item]}}</td>
-                <td>{{vert[item]}}</td>
-                <td>{{dates[item]}}</td>
+                <td><a href="https://www.strava.com/activities/{{item}}">{{names[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}">{{dist[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}">{{vert[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}">{{dates[item]}}</a></td>
             </tr>
         {% endfor %}
     </table>
-    
+
     <div id="mapid">
         <script type="text/javascript">
-            
-            var map = L.map('mapid').setView([37.45,-122.30],13);
-            L.tileLayer(
-            'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            ).addTo(map);
+
+        var layer = new L.StamenTileLayer("terrain");
+        var map = new L.Map("mapid", {
+            center: new L.LatLng(37.45, -122.3),
+            zoom: 12
+        });
+        map.addLayer(layer);    
+            //var map = L.map('mapid').setView([37.45,-122.30],13);
+            //L.tileLayer(
+            //'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+            //).addTo(map);
             
         const jsArrayOfItems = {{encoded_routes | safe}};
         
