@@ -1,19 +1,42 @@
+body {
+	height: 100%;
+	font-family: 'Lato', sans-serif;
+}
+
 #mapid {
-	height: 800px;
+	height: 80%;
 }
 
 table {
 	width: 100%;
 	font-family: 'Lato', sans-serif;
+	border-collapse: collapse;
 }
 
-tr {
-	border: 5px solid black;
+td {
+	padding: 3px;
+	border: 1px solid white;
+}
+
+td a {
+	display: block;
+	text-decoration: none;
+	color: white;
 }
 
 th {
 	font-weight: bold;
 	padding: 5px;
 	background-color: #6da3f9;
-	color: white
+	color: white;
+}
+
+tr {
+	background-color: #c2c2d6;
+	border: 2px solid white;
+}
+
+tr:hover {
+	background-color: black;
+	color: red;
 }
