@@ -109,22 +109,23 @@ def callback():
 	client.parse_request_body_response(json.dumps(token_response.json()))
 
 	#Hit /athlete/activities with newly acquired access token
+	#Iterate through pages of 30 activities at a time
+	page=1
 	useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
 	uri, headers, body = client.add_token(useractivities_endpoint)
-	user_activities_response = requests.get(uri, headers=headers, data=body)
-
-	#CAROLINE I THINK YOU CAN DELETE THIS BLOCK DECIDE LATER
-	#json.dumps the activities response, and create a new List object with activity names
-	user_activities = user_activities_response.json()
-	activity_names = {}
-	for i in user_activities:
-		activity_names[str(i["name"])] = str(i["map"]["summary_polyline"])
-	
-	#also create a list of activity ids
 	activity_ids = {}
-	for i in user_activities:
-		activity_ids[str(i["id"])] = str(i["name"])
-		
+	while page < 3:
+		params = {'per_page':30, 'page':page}
+		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
+		#Stop when there are no more activities to get
+		if (not user_activities_response):
+			break
+		#Otherwise, add the activities to a dict activity ids (id x name)
+		user_activities = user_activities_response.json()
+		for i in user_activities:
+			activity_ids[str(i["id"])] = str(i["name"])
+		page += 1
+	
 	#Hit /athlete to get the athlete's info
 	athlete_endpoint = ("https://www.strava.com/api/v3/athlete")
 	uri, headers, body = client.add_token(athlete_endpoint)
@@ -136,7 +137,7 @@ def callback():
 	athlete_lastname = athlete["lastname"]
 	athlete_photo = athlete["profile"]
 
-	return render_template('routes.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo, activity_names=activity_names, activity_ids=activity_ids)
+	return render_template('routes.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo, activity_ids=activity_ids)#, activity_names=activity_names)
 
 @app.route("/displayroutes", methods=['GET','POST'])
 def displayroutes():
