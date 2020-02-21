@@ -25,10 +25,10 @@
         </tr>
         {% for item in selected_routes %}
             <tr>
-                <td><a href="https://www.strava.com/activities/{{item}}">{{names[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}">{{dist[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}">{{vert[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}">{{dates[item]}}</a></td>
+                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{names[item]}}</a></td>
+                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{dist[item]}}</a></td>
+                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{vert[item]}}</a></td>
+                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{dates[item]}}</a></td>
             </tr>
         {% endfor %}
     </table>
@@ -42,10 +42,9 @@
             zoom: 12
         });
         map.addLayer(layer);    
-            //var map = L.map('mapid').setView([37.45,-122.30],13);
-            //L.tileLayer(
-            //'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            //).addTo(map);
+            
+        //var map = L.map('mapid').setView([37.45,-122.30],13);
+        //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
             
         const jsArrayOfItems = {{encoded_routes | safe}};
         
