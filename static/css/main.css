@@ -42,5 +42,12 @@ tr {
 
 tr:hover {
 	background-color: black;
-	color: red;
+}
+
+table .toggle {
+	display: none;
+}
+
+table:hover .toggle {
+	display: table-row;
 }
