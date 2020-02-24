@@ -80,6 +80,7 @@
                     lineJoin: 'round'
                 }
             );
+            route.bindPopup("<b>"+names[encoded]+"</b><br>"+dist[encoded]+" miles<br>"+vert[encoded]+" feet<br>"+dates[encoded]);
             route.addTo(map);
         }
 
