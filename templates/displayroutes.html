@@ -49,9 +49,13 @@
     <div id="mapid">
         <script type="text/javascript">
 
-        const jsArrayOfItems = {{encoded_routes | safe}};
-        
-        var starting_coords = L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0]
+        //Dict of id x polyline
+        //const jsArrayOfItems = {{encoded_routes | safe}};
+        const selectedRoutes = {{ selected_routes | safe }}
+
+        var starting_coords = L.Polyline.fromEncoded(Object.values(selectedRoutes)[0]).getLatLngs()[0];
+
+        //var starting_coords = L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0]
 
         var layer = new L.StamenTileLayer("terrain");
         var map = new L.Map("mapid", {
@@ -62,19 +66,29 @@
             
         //var map = L.map('mapid').setView([37.45,-122.30],13);
         //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
-            
-        for (let encoded of jsArrayOfItems) {
-            var coordinates = L.Polyline.fromEncoded(encoded).getLatLngs();
-
-            L.polyline(
-            coordinates, {
-                color: 'blue',
-                weight: 2,
-                lineJoin: 'round'
-            }
-            ).addTo(map);
-        }
         
+        //Arrays of:
+        //id x name:
+        const names = {{ names | safe }};
+        //id x distance:
+        const dist = {{ dist | safe }};
+        //id x vert:
+        const vert = {{ vert | safe }};
+        //id x date:
+        const dates = {{ dates | safe }};
+
+        for (let encoded in selectedRoutes) {
+            var coordinates = L.Polyline.fromEncoded(selectedRoutes[encoded]).getLatLngs();
+            var route = L.polyline (
+                coordinates, {
+                    color: 'blue',
+                    weight: 2,
+                    lineJoin: 'round'
+                }
+            );
+            route.addTo(map);
+        }
+
         </script>
     </div>
 <body>
