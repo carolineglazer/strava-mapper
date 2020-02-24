@@ -9,6 +9,7 @@ body {
 
 #mapid {
 	height: 800px;
+	border: 2px solid white;
 }
 
 table {
@@ -35,19 +36,21 @@ th {
 	color: white;
 }
 
+#title:hover {
+	cursor: pointer;
+	background-color: black;
+	text-decoration: underline;
+}
+
 tr {
 	background-color: #c2c2d6;
 	border: 2px solid white;
 }
 
 tr:hover {
-	background-color: black;
+	background-color: gray;
 }
 
-table .toggle {
+.activities {
 	display: none;
-}
-
-table:hover .toggle {
-	display: table-row;
 }
