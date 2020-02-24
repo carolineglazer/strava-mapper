@@ -72,9 +72,10 @@
         const dates = {{ dates | safe }};
 
         var allRoutes = L.featureGroup()
-            .on('click', function(route) { 
-                console.log(route)
-                route["layer"].setStyle({'color':'red'});
+            .on('click', function(route) {
+                allRoutes.setStyle({color:'blue',weight:2}) 
+                route["layer"].setStyle({color:'red', weight:6, opacity:0.6})
+                route["layer"].bringToFront();
             });
                 
         for (let encoded in selectedRoutes) {
@@ -82,8 +83,7 @@
             var route = L.polyline (
                 coordinates, {
                     color: 'blue',
-                    weight: 2,
-                    lineJoin: 'round'
+                    weight: 2
                 }
             );
             route.bindPopup("<b>"+names[encoded]+"</b><br>"+dist[encoded]+" miles<br>"+vert[encoded]+" feet<br>"+dates[encoded]);
