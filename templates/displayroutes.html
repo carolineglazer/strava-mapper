@@ -27,8 +27,8 @@
 
 <body>
     <table>
-        <tr>
-            <th id="title" colspan="4"><span onClick="toggle();">Activities (click to show/hide)</span></th>
+        <tr onClick="toggle();">
+            <th id="title" colspan="4">Activities (click to show/hide)</th>
         </tr>
         <tr class="activities">
             <th>Name</th>
@@ -52,10 +52,6 @@
         const jsArrayOfItems = {{encoded_routes | safe}};
         
         var starting_coords = L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0]
-
-        console.log(jsArrayOfItems[0])
-        console.log(L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0])
-        console.log(starting_coords)
 
         var layer = new L.StamenTileLayer("terrain");
         var map = new L.Map("mapid", {
