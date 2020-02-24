@@ -174,7 +174,7 @@ def displayroutes():
 			encoded_routes.append(selected_routes[i])
 			#encoded_routes.append(reformatted)
 
-		return render_template('displayroutes.html', selected_routes=selected_routes, encoded_routes=encoded_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
+		return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
 
 if __name__ == '__main__':
 	app.run()
