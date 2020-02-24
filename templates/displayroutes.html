@@ -7,7 +7,6 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
 	<script type="text/javascript" src="https://rawgit.com/jieter/Leaflet.encoded/master/Polyline.encoded.js"></script>
-    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400">
     <script>
@@ -48,10 +47,8 @@
 
     <div id="mapid">
         <script type="text/javascript">
-
         //Dict of id x polyline
         const selectedRoutes = {{ selected_routes | safe }}
-        var starting_coords = L.Polyline.fromEncoded(Object.values(selectedRoutes)[0]).getLatLngs()[0];
 
         //Arrays of:
         //id x name:
@@ -86,11 +83,8 @@
             allRoutes.addLayer(route)
         }
 
-        console.log()
-
         //Create the map
         var map = new L.Map("mapid", {
-            //center: new L.LatLng(starting_coords["lat"], starting_coords["lng"]),
             center: allRoutes.getBounds().getCenter(),
         });
         //Add basemap and zoom to extent of allRoutes
