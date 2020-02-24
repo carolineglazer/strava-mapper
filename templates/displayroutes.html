@@ -10,25 +10,38 @@
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400">
+    <script>
+        function toggle() {
+            var activities = document.getElementsByClassName("activities");
+            for (i = 0; i < activities.length; i++) {
+                if (activities[i].style.display=="none") {
+                    activities[i].style.display='table-row';
+                }
+                else {
+                    activities[i].style.display="none";
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
     <table>
         <tr>
-            <h1><th colspan="4">Activities</th></h1>
+            <th id="title" colspan="4"><span onClick="toggle();">Activities (click to show/hide)</span></th>
         </tr>
-        <tr>
+        <tr class="activities">
             <th>Name</th>
             <th>Distance (miles)</th>
             <th>Vertical (feet)</th>
             <th>Date</th>
         </tr>
         {% for item in selected_routes %}
-            <tr>
-                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{names[item]}}</a></td>
-                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{dist[item]}}</a></td>
-                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{vert[item]}}</a></td>
-                <td><a href target="_blank"="https://www.strava.com/activities/{{item}}">{{dates[item]}}</a></td>
+            <tr class="activities">
+                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{names[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{dist[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{vert[item]}}</a></td>
+                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{dates[item]}}</a></td>
             </tr>
         {% endfor %}
     </table>
@@ -36,9 +49,17 @@
     <div id="mapid">
         <script type="text/javascript">
 
+        const jsArrayOfItems = {{encoded_routes | safe}};
+        
+        var starting_coords = L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0]
+
+        console.log(jsArrayOfItems[0])
+        console.log(L.Polyline.fromEncoded(jsArrayOfItems[0]).getLatLngs()[0])
+        console.log(starting_coords)
+
         var layer = new L.StamenTileLayer("terrain");
         var map = new L.Map("mapid", {
-            center: new L.LatLng(37.45, -122.3),
+            center: new L.LatLng(starting_coords["lat"], starting_coords["lng"]),
             zoom: 12
         });
         map.addLayer(layer);    
@@ -46,8 +67,6 @@
         //var map = L.map('mapid').setView([37.45,-122.30],13);
         //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
             
-        const jsArrayOfItems = {{encoded_routes | safe}};
-        
         for (let encoded of jsArrayOfItems) {
             var coordinates = L.Polyline.fromEncoded(encoded).getLatLngs();
 
