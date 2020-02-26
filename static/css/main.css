@@ -42,7 +42,6 @@ th {
 
 #title:hover {
 	cursor: pointer;
-	background-color: black;
 	text-decoration: underline;
 }
 
