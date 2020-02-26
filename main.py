@@ -153,7 +153,7 @@ def displayroutes():
 		selected_dist = {}
 		selected_vert = {}
 		selected_dates = {}
-		for i in selected_ids:
+		for i in sorted(selected_ids):
 			try:
 				activityids_endpoint = "https://www.strava.com/api/v3/activities/" + i[0]
 				uri, headers, body = client.add_token(activityids_endpoint)
@@ -166,13 +166,6 @@ def displayroutes():
 				selected_dates[str(activity["id"])] = activity["start_date"][5:7]+"/"+activity["start_date"][8:10]+"/"+activity["start_date"][:4]
 			except:
 				pass
-
-		#Make a list of just the summary polylines
-		encoded_routes = []
-		for i in selected_routes:
-			#reformatted = selected_routes[i].replace("\\","\\\\")
-			encoded_routes.append(selected_routes[i])
-			#encoded_routes.append(reformatted)
 
 		return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
 

@@ -27,20 +27,22 @@
 <body>
     <table>
         <tr onClick="toggle();">
-            <th id="title" colspan="4">Activities (click to show/hide)</th>
+            <th id="title" colspan="5">Activities (click to show/hide)</th>
         </tr>
         <tr class="activities">
             <th>Name</th>
             <th>Distance (miles)</th>
             <th>Vertical (feet)</th>
             <th>Date</th>
+            <th>Link</th>
         </tr>
         {% for item in selected_routes %}
-            <tr class="activities">
-                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{names[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{dist[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{vert[item]}}</a></td>
-                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">{{dates[item]}}</a></td>
+            <tr class="activities" onClick="highlightRoute(String({{item}}));">
+                <td>{{names[item]}}</td>
+                <td>{{dist[item]}}</td>
+                <td>{{vert[item]}}</td>
+                <td>{{dates[item]}}</td>
+                <td><a href="https://www.strava.com/activities/{{item}}" target="_blank">Strava&#x1F5D7</a></td>
             </tr>
         {% endfor %}
     </table>
@@ -60,15 +62,27 @@
         //id x date:
         const dates = {{ dates | safe }};
 
+        //Designated function to allow route highlighting from HTML
+        function highlightRoute(ID) {
+            allRoutes.setStyle({color:'blue', weight:2})
+            allRoutes.eachLayer(function(layer) {
+                if (layer.routeID === ID) {
+                    layer.setStyle({color:'red', weight:6, opacity:0.6})
+                    layer.openPopup()
+                    layer.bringToFront();
+                }
+            })
+        };
+
         //All route polylines are stored in a feature group
-        //on-click highlighting is controlled here
+        //on-click highlighting is controlled here        
         var allRoutes = L.featureGroup()
             .on('click', function(route) {
                 allRoutes.setStyle({color:'blue',weight:2}) 
                 route["layer"].setStyle({color:'red', weight:6, opacity:0.6})
-                route["layer"].bringToFront();
+                route["layer"].bringToFront()
             });
-                
+
         //Decode route polylines and add to the allRoutes feature group
         //Popup styling is controlled here
         for (let encoded in selectedRoutes) {
@@ -80,6 +94,8 @@
                 }
             );
             route.bindPopup("<b>"+names[encoded]+"</b><br>"+dist[encoded]+" miles<br>"+vert[encoded]+" feet<br>"+dates[encoded]);
+            //Give each route a property "routeID" equal to its Strava ID
+            route.routeID = encoded
             allRoutes.addLayer(route)
         }
 
