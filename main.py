@@ -37,8 +37,8 @@ app = Flask(__name__)
 #app.secret_key = os.urandom(24)
 
 #User session management setup
-login_manager = LoginManager()
-login_manager.init_app(app)
+#login_manager = LoginManager()
+#login_manager.init_app(app)
 
 #No db or SQL for now
 '''
@@ -60,15 +60,6 @@ client = WebApplicationClient(STRAVA_CLIENT_ID)
 
 @app.route("/")
 def index():
-	'''
-	if current_user.is_authenticated:
-		return (
-			#omit variable HTML for now
-			"Hello user!"
-		)
-	else:
-		return '<a class="button" href="/login">Login to Strava</a>'
-	'''
 	return render_template('index.html')
 
 @app.route("/login")
@@ -108,13 +99,18 @@ def callback():
 	#Parse the tokens!
 	client.parse_request_body_response(json.dumps(token_response.json()))
 
-	#Hit /athlete/activities with newly acquired access token
-	#Iterate through pages of 30 activities at a time
-	page=1
+	return render_template('hello.html')
+
+@app.route("/routes")
+#Hit /athlete/activities with newly acquired access token
+#Iterate through pages of 30 activities at a time
+#page=1
+def select_routes(page=2):
 	useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
 	uri, headers, body = client.add_token(useractivities_endpoint)
 	activity_ids = {}
 	while page < 3:
+		print(page)
 		params = {'per_page':30, 'page':page}
 		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
 		#Stop when there are no more activities to get
