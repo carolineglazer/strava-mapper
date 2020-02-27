@@ -97,9 +97,16 @@ def callback():
 	)
 
 	#Parse the tokens!
-	client.parse_request_body_response(json.dumps(token_response.json()))
-
-	return render_template('hello.html')
+	response = client.parse_request_body_response(json.dumps(token_response.json()))
+	
+	#Gather info on the athlete before loading hello.html
+	athlete = response["athlete"]
+	athlete_firstname = athlete["firstname"]
+	athlete_lastname = athlete["lastname"]
+	athlete_photo = athlete["profile"]
+	
+	#Load hello.html
+	return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
 
 @app.route("/routes")
 #Hit /athlete/activities with newly acquired access token
@@ -127,14 +134,8 @@ def select_routes(page=2):
 	uri, headers, body = client.add_token(athlete_endpoint)
 	athlete_response = requests.get(uri, headers=headers, data=body)
 
-	#Parse athlete response for first and last name and photo
-	athlete = athlete_response.json()
-	athlete_firstname = athlete["firstname"]
-	athlete_lastname = athlete["lastname"]
-	athlete_photo = athlete["profile"]
-
-	return render_template('routes.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo, activity_ids=activity_ids)#, activity_names=activity_names)
-
+	return render_template('routes.html', activity_ids=activity_ids)
+	
 @app.route("/displayroutes", methods=['GET','POST'])
 def displayroutes():
 	if request.method == 'POST':
