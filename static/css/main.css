@@ -29,6 +29,10 @@ td a {
 	color: white;
 }
 
+td label {
+	display: block;
+}
+
 td a:hover {
 	text-decoration: underline;
 }

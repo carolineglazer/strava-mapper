@@ -69,7 +69,8 @@
                 if (layer.routeID === ID) {
                     layer.setStyle({color:'red', weight:6, opacity:0.6})
                     layer.openPopup()
-                    layer.bringToFront();
+                    layer.bringToFront()
+                    map.panTo(layer.getCenter());
                 }
             })
         };
