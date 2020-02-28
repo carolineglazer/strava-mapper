@@ -6,19 +6,16 @@
 </head>
 
 <body>
-	<h1>Hello, {{athlete_firstname}} {{athlete_lastname}}!</h1>
-	<img src={{athlete_photo}}>
+	<h1>Choose routes to display:</h1>
 
 	<form action="/displayroutes" method="post">
+		<input type="submit" class="button" value="submit">
 		<table>
 			{% for i in activity_ids %}
 			<tr>
 				<td><label><input type="checkbox" name={{i}} value={{activity_ids[i]}}>{{activity_ids[i]}}</label></td>
 			</tr>
 			{% endfor %}
-			<tr>
-				<input type="submit" value="submit">
-			</tr>
 		</table>
 	</form>
 </body>

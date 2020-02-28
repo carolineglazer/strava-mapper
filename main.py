@@ -2,6 +2,8 @@
 import json
 import os
 import sqlite3
+import datetime
+import calendar
 
 #Third-party libraries
 from flask import Flask, redirect, request, url_for, render_template
@@ -108,34 +110,34 @@ def callback():
 	#Load hello.html
 	return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
 
-@app.route("/routes")
-#Hit /athlete/activities with newly acquired access token
-#Iterate through pages of 30 activities at a time
-#page=1
-def select_routes(page=2):
+@app.route("/routes", methods=['GET','POST'])
+def select_routes():
+	if request.method == 'POST':		
+		start_year = int(request.form['start_year'])
+		start_month = int(request.form['start_month'])
+		end_year = int(request.form['end_year'])
+		end_month = int(request.form['end_month'])
+	#Convert to epoch timestamp
+	end_day = calendar.monthrange(end_year, end_month)[1]
+	start = int(datetime.datetime(start_year, start_month, 1, 0, 0).timestamp())
+	end = int(datetime.datetime(end_year, end_month, end_day, 0, 0).timestamp())
+	print(start)
+	print(end)
+
+	#Hit /athlete/activities with newly acquired access token
 	useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
 	uri, headers, body = client.add_token(useractivities_endpoint)
-	activity_ids = {}
-	while page < 3:
-		print(page)
-		params = {'per_page':30, 'page':page}
-		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
-		#Stop when there are no more activities to get
-		if (not user_activities_response):
-			break
-		#Otherwise, add the activities to a dict activity ids (id x name)
-		user_activities = user_activities_response.json()
-		for i in user_activities:
-			activity_ids[str(i["id"])] = str(i["name"])
-		page += 1
-	
-	#Hit /athlete to get the athlete's info
-	athlete_endpoint = ("https://www.strava.com/api/v3/athlete")
-	uri, headers, body = client.add_token(athlete_endpoint)
-	athlete_response = requests.get(uri, headers=headers, data=body)
+	activity_ids = {}	
+	params = {'per_page':30, 'after':start, 'before':end}
+	user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
 
-	return render_template('routes.html', activity_ids=activity_ids)
+	#Add the activities to a dict activity ids (id x name)
+	user_activities = user_activities_response.json()
+	for i in user_activities:
+		activity_ids[str(i["id"])] = str(i["name"])
 	
+	return render_template('routes.html', activity_ids=activity_ids)
+
 @app.route("/displayroutes", methods=['GET','POST'])
 def displayroutes():
 	if request.method == 'POST':
