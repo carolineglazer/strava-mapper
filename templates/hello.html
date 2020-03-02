@@ -5,66 +5,68 @@
 </head>
 
 <body>
-    {% if athlete_firstname %}
-        <h1>Hello, {{athlete_firstname}} {{athlete_lastname}}!</h1>
-        <img src={{athlete_photo}}>
-    {% else %}
-        <h2>Please select a start date that is earlier than the end date.</h2>
-    {% endif %}
-    <form action="/routes" method="post">
-        <p>
-            <h3>Start date:</h3>
-        </p>
-        <select name="start_month">
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
-        <select name="start_year">
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-        </select>
-        <p>
-            <h3>End date:</h3>
-        </p>
-        <select name="end_month">
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
-        <select name="end_year">
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-        </select>
-        <p>
-            <h3>Number of activities to display:</h3>
-        </p>
-        <select name="per_page">
-            <option value="25">25</option>
-            <option value="50">50</option>
-        </select>
-        <p>
-            <input type="submit" class="button" value="Submit">
-        </p>
-    </form>
+    <div id="hello">
+        {% if athlete_firstname %}
+            <h1>Hello, {{athlete_firstname}} {{athlete_lastname}}!</h1>
+            <img src={{athlete_photo}}>
+        {% else %}
+            <h2>Please select a start date that is earlier than the end date.</h2>
+        {% endif %}
+        <form action="/routes" method="post">
+            <p>
+                <h3>Start date:</h3>
+            </p>
+            <select name="start_month">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+            <select name="start_year">
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+            </select>
+            <p>
+                <h3>End date:</h3>
+            </p>
+            <select name="end_month">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+            <select name="end_year">
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+            </select>
+            <p>
+                <h3>Number of activities to display:</h3>
+            </p>
+            <select name="per_page">
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+            <p>
+                <input type="submit" class="button" value="Submit">
+            </p>
+        </form>
+    </div>
 </body>

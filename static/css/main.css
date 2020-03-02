@@ -68,9 +68,18 @@ tr:hover {
 	padding: 10px;
 	border-radius: 5px;
 	border: none;
+    font-weight: bold;
 }
 
 .button:hover {
 	background-color: black;
 	cursor: pointer;
+}
+
+#hello {
+	text-align: center;
+	background-color: #c2c2d6;
+	width: 50%;
+	margin: auto;
+	padding: 10px;
 }

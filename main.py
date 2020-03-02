@@ -112,8 +112,6 @@ def callback():
 
 @app.route("/routes", methods=['GET','POST'])
 def select_routes():
-	print(request.method)
-	print(request)
 	if request.method == 'POST':		
 		start_year = int(request.form['start_year'])
 		start_month = int(request.form['start_month'])
