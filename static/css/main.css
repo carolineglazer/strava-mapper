@@ -78,10 +78,15 @@ tr:hover {
 
 #hello {
 	text-align: center;
-	background-color: #c2c2d6;
+	background-color: #e1e1eb;
 	width: 50%;
-	margin: auto;
+	margin: 5% auto;
 	padding: 10px;
+}
+
+img {
+	max-height: 200px;
+	border-radius: 100px;
 }
 
 #routes {
