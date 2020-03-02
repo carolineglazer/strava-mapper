@@ -61,3 +61,16 @@ tr:hover {
 .activities {
 	display: none;
 }
+
+.button {
+	background-color: #6da3f9;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	border: none;
+}
+
+.button:hover {
+	background-color: black;
+	cursor: pointer;
+}

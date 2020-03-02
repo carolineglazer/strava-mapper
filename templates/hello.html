@@ -12,6 +12,9 @@
         <h2>Please select a start date that is earlier than the end date.</h2>
     {% endif %}
     <form action="/routes" method="post">
+        <p>
+            <h3>Start date:</h3>
+        </p>
         <select name="start_month">
             <option value="1">January</option>
             <option value="2">February</option>
@@ -31,6 +34,9 @@
             <option value="2019">2019</option>
             <option value="2018">2018</option>
         </select>
+        <p>
+            <h3>End date:</h3>
+        </p>
         <select name="end_month">
             <option value="1">January</option>
             <option value="2">February</option>
@@ -50,9 +56,15 @@
             <option value="2019">2019</option>
             <option value="2018">2018</option>
         </select>
-        <input type="submit" class="button" value="Submit">
+        <p>
+            <h3>Number of activities to display:</h3>
+        </p>
+        <select name="per_page">
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+        <p>
+            <input type="submit" class="button" value="Submit">
+        </p>
     </form>
-    <p>
-        <a class="button" href="/routes"></a>
-    </p>
 </body>

@@ -112,11 +112,14 @@ def callback():
 
 @app.route("/routes", methods=['GET','POST'])
 def select_routes():
+	print(request.method)
+	print(request)
 	if request.method == 'POST':		
 		start_year = int(request.form['start_year'])
 		start_month = int(request.form['start_month'])
 		end_year = int(request.form['end_year'])
 		end_month = int(request.form['end_month'])
+		per_page = int(request.form['per_page'])
 	#Convert to epoch timestamp
 	end_day = calendar.monthrange(end_year, end_month)[1]
 	start = int(datetime.datetime(start_year, start_month, 1, 0, 0).timestamp())
@@ -127,7 +130,7 @@ def select_routes():
 		useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
 		uri, headers, body = client.add_token(useractivities_endpoint)
 		activity_ids = {}	
-		params = {'per_page':30, 'after':start, 'before':end}
+		params = {'per_page':per_page, 'after':start, 'before':end}
 		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
 	else:
 		return render_template('hello.html')
