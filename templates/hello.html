@@ -5,8 +5,12 @@
 </head>
 
 <body>
-    <h1>Hello, {{athlete_firstname}} {{athlete_lastname}}!</h1>
-	<img src={{athlete_photo}}>
+    {% if athlete_firstname %}
+        <h1>Hello, {{athlete_firstname}} {{athlete_lastname}}!</h1>
+        <img src={{athlete_photo}}>
+    {% else %}
+        <h2>Please select a start date that is earlier than the end date.</h2>
+    {% endif %}
     <form action="/routes" method="post">
         <select name="start_month">
             <option value="1">January</option>
@@ -49,6 +53,6 @@
         <input type="submit" class="button" value="Submit">
     </form>
     <p>
-        <a class="button" href="/routes">Choose my routes</a>
+        <a class="button" href="/routes"></a>
     </p>
 </body>

@@ -121,15 +121,16 @@ def select_routes():
 	end_day = calendar.monthrange(end_year, end_month)[1]
 	start = int(datetime.datetime(start_year, start_month, 1, 0, 0).timestamp())
 	end = int(datetime.datetime(end_year, end_month, end_day, 0, 0).timestamp())
-	print(start)
-	print(end)
 
-	#Hit /athlete/activities with newly acquired access token
-	useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
-	uri, headers, body = client.add_token(useractivities_endpoint)
-	activity_ids = {}	
-	params = {'per_page':30, 'after':start, 'before':end}
-	user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
+	if end > start:
+		#Hit /athlete/activities with newly acquired access token
+		useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
+		uri, headers, body = client.add_token(useractivities_endpoint)
+		activity_ids = {}	
+		params = {'per_page':30, 'after':start, 'before':end}
+		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
+	else:
+		return render_template('hello.html')
 
 	#Add the activities to a dict activity ids (id x name)
 	user_activities = user_activities_response.json()
