@@ -48,26 +48,26 @@ def create_secret(project_id, secret_id):
     # Print the new secret name.
     print('Created secret: {}'.format(response.name))
 
-	def add_secret_version(project_id, secret_id, payload):
-		"""
-		Add a new secret version to the given secret with the provided payload.
-		"""
+def add_secret_version(project_id, secret_id, payload):
+	"""
+	Add a new secret version to the given secret with the provided payload.
+	"""
 
-		# Import the Secret Manager client library.
-		from google.cloud import secretmanager_v1beta1 as secretmanager
+	# Import the Secret Manager client library.
+	from google.cloud import secretmanager_v1beta1 as secretmanager
 
-		# Create the Secret Manager client.
-		client = secretmanager.SecretManagerServiceClient()
+	# Create the Secret Manager client.
+	client = secretmanager.SecretManagerServiceClient()
 
-		# Build the resource name of the parent secret.
-		parent = client.secret_path(project_id, secret_id)
+	# Build the resource name of the parent secret.
+	parent = client.secret_path(project_id, secret_id)
 
-		# Convert the string payload into a bytes. This step can be omitted if you
-		# pass in bytes instead of a str for the payload argument.
-		payload = payload.encode('UTF-8')
+	# Convert the string payload into a bytes. This step can be omitted if you
+	# pass in bytes instead of a str for the payload argument.
+	payload = payload.encode('UTF-8')
 
-		# Add the secret version.
-		response = client.add_secret_version(parent, {'data': payload})
+	# Add the secret version.
+	response = client.add_secret_version(parent, {'data': payload})
 
-		# Print the new secret version name.
-		print('Added secret version: {}'.format(response.name))
+	# Print the new secret version name.
+	print('Added secret version: {}'.format(response.name))
