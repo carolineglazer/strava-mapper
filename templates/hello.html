@@ -11,7 +11,7 @@
             <img src={{athlete_photo}} id="athlete-photo">
             <h3>Select a date range to choose activities from:</h3>
         {% else %}
-            <h2>Please select a start date that is earlier than the end date.</h2>
+            <h2 style="color:red;">Please select a start date that is earlier than the end date.</h2>
         {% endif %}
         <form action="/routes" method="post">
             <p>

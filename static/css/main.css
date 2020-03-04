@@ -95,3 +95,19 @@ tr:hover {
 	width: 50%;
 	text-align: center;
 }
+
+.leaflet-popup-content-wrapper {
+	opacity: .9;
+}
+
+.leaflet-popup-content-wrapper + .leaflet-popup-tip-container {
+	opacity: .9;
+}
+
+.leaflet-popup-content-wrapper:hover {
+	opacity: .6;
+}
+
+.leaflet-popup-content-wrapper:hover + .leaflet-popup-tip-container {
+	opacity: .6;
+}

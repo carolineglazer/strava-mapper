@@ -91,6 +91,8 @@ def callback():
 		client_secret=STRAVA_CLIENT_SECRET
 	)
 	
+	print(token_url)
+
 	token_response = requests.post(
 		token_url,
 		headers=headers,
@@ -101,6 +103,8 @@ def callback():
 	#Parse the tokens!
 	response = client.parse_request_body_response(json.dumps(token_response.json()))
 	
+	print(response)
+
 	#Gather info on the athlete before loading hello.html
 	athlete = response["athlete"]
 	athlete_firstname = athlete["firstname"]

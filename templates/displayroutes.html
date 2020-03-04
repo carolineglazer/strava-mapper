@@ -67,7 +67,7 @@
             allRoutes.setStyle({color:'blue', weight:2})
             allRoutes.eachLayer(function(layer) {
                 if (layer.routeID === ID) {
-                    layer.setStyle({color:'red', weight:6, opacity:0.6})
+                    layer.setStyle({color:'red', weight:6})
                     layer.openPopup()
                     layer.bringToFront()
                     map.panTo(layer.getCenter());
@@ -85,7 +85,6 @@
             });
 
         //Decode route polylines and add to the allRoutes feature group
-        //Popup styling is controlled here
         for (let encoded in selectedRoutes) {
             var coordinates = L.Polyline.fromEncoded(selectedRoutes[encoded]).getLatLngs();
             var route = L.polyline (
@@ -94,6 +93,7 @@
                     weight: 2
                 }
             );
+            //Popup styling is controlled here
             route.bindPopup("<b>"+names[encoded]+"</b><br>"+dist[encoded]+" miles<br>"+vert[encoded]+" feet<br>"+dates[encoded]);
             //Give each route a property "routeID" equal to its Strava ID
             route.routeID = encoded
