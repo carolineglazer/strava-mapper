@@ -31,7 +31,6 @@ from access_secrets import access_secret_version, create_secret, add_secret_vers
 STRAVA_CLIENT_ID = access_secret_version('strava-mapper', 'strava-client-id', 'latest')
 STRAVA_CLIENT_SECRET = access_secret_version('strava-mapper', 'strava-client-secret', 'latest')
 fake_hash=str(random.getrandbits(128))
-create_secret('strava-mapper', fake_hash)
 
 #set environment variable DEBUG to enable testing on localhost
 #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -64,6 +63,10 @@ client = WebApplicationClient(STRAVA_CLIENT_ID)
 @app.route("/")
 def index():
 	return render_template('index.html')
+	try:
+		create_secret('strava-mapper', fake_hash)
+	except:
+		pass
 
 @app.route("/login")
 def login():
