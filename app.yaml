@@ -1,3 +1,6 @@
 runtime: python37
-url: .*
+
+handlers: 
+- url: /.*
   secure: always
+  script: auto
