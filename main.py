@@ -22,11 +22,6 @@ import requests
 #Import secrets.py function to access secrets API
 from access_secrets import access_secret_version, create_secret, add_secret_version
 
-#No DB or SQL for now
-#Internal imports
-#from db import init_db_command
-#from user import User
-
 #Configuration
 STRAVA_CLIENT_ID = access_secret_version('strava-mapper', 'strava-client-id', 'latest')
 STRAVA_CLIENT_SECRET = access_secret_version('strava-mapper', 'strava-client-secret', 'latest')
@@ -38,32 +33,15 @@ fake_hash=str(random.getrandbits(128))
 #Flask app setup
 app = Flask(__name__)
 
-#User session management setup
-#login_manager = LoginManager()
-#login_manager.init_app(app)
-
-#No db or SQL for now
-'''
-#Naive database setup
-try:
-	init_db_command()
-except sqlite3.OperationalError:
-	#Assume it's already been created
-	pass
-'''
-
 #Oauth2 client setup
 client = WebApplicationClient(STRAVA_CLIENT_ID)
-
-#Flask-Login helper to retrieve a user from our db
-#@login_manager.user_loader
-#def load_user(user_id):
-#	return User.get(user_id)
 
 @app.route("/")
 def index():
 	try:
 		create_secret('strava-mapper', fake_hash)
+	except:
+		pass
 	return render_template('index.html')
 
 @app.route("/login")
@@ -79,6 +57,7 @@ def login():
 def callback():
 	#Get authorization code Strava sends back with redirect uri
 	code = request.args.get("code")
+	print(code)
 	#If this is the first time on this page...
 	if code:
 		#Exchange authorization code for a refresh token and short-lived access token
