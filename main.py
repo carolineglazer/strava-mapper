@@ -86,14 +86,16 @@ def callback():
 		#Store the athlete_dict in Secret Manager as a string (temporarily)
 		create_secret('strava-mapper', fake_hash)
 		add_secret_version('strava-mapper', fake_hash, str(athlete_info))
-		#Gather info on the athlete before loading hello.html
+		#Set up for info gathering outside of this if statement
 		athlete = response["athlete"]
 	else:
 		#Grab the athlete_info stringified dict from Secret Manager, convert back to dict, and use that data to render hello.html
 		response_str = access_secret_version('strava-mapper', fake_hash, 'latest')
 		json_str = response_str.replace("'", "\"")
+		#Set up for info gathering outside of this else statement
 		athlete = json.loads(json_str)
 		
+	#Gather info on the athlete before loading hello.html
 	athlete_firstname = athlete["firstname"]
 	athlete_lastname = athlete["lastname"]
 	athlete_photo = athlete["profile"]
