@@ -62,11 +62,9 @@ client = WebApplicationClient(STRAVA_CLIENT_ID)
 
 @app.route("/")
 def index():
-	return render_template('index.html')
 	try:
 		create_secret('strava-mapper', fake_hash)
-	except:
-		pass
+	return render_template('index.html')
 
 @app.route("/login")
 def login():
