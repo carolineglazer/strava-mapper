@@ -4,6 +4,7 @@ import os
 import sqlite3
 import datetime
 import calendar
+import random
 
 #Third-party libraries
 from flask import Flask, redirect, request, url_for, render_template
@@ -19,7 +20,7 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 #Import secrets.py function to access secrets API
-from access_secrets import access_secret_version
+from access_secrets import access_secret_version, create_secret, add_secret_version
 
 #No DB or SQL for now
 #Internal imports
@@ -29,14 +30,14 @@ from access_secrets import access_secret_version
 #Configuration
 STRAVA_CLIENT_ID = access_secret_version('strava-mapper', 'strava-client-id', 'latest')
 STRAVA_CLIENT_SECRET = access_secret_version('strava-mapper', 'strava-client-secret', 'latest')
+fake_hash=str(random.getrandbits(128))
+create_secret('strava-mapper', fake_hash)
 
 #set environment variable DEBUG to enable testing on localhost
 #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 #Flask app setup
 app = Flask(__name__)
-#(not including this for now...) - 11/12/19
-#app.secret_key = os.urandom(24)
 
 #User session management setup
 #login_manager = LoginManager()
@@ -76,47 +77,58 @@ def login():
 @app.route("/login/callback")
 def callback():
 	#Get authorization code Strava sends back with redirect uri
-	code = request.args.get("code") 
-
-	#Exchange authorization code for a refresh token and short-lived access token
-	token_url, headers, body = client.prepare_token_request(
-		"https://www.strava.com/oauth/token",
-		#force HTTPS when creating callback URL (https://stackoverflow.com/questions/49071504/google-app-engine-flask-ssl-and-oauth2-problems)
-		#authorization_response=request.url.replace('http','https'),
-		redirect_url=request.base_url,
-		code=code,
-		#Note: this is where Strava token request differs from Google token request -
-		#Strava requires that the client_secret be included in the body of the POST,
-		#not just in the auth, presumably - 11/12/19
-		client_secret=STRAVA_CLIENT_SECRET
-	)
-	
-	print(token_url)
-
-	token_response = requests.post(
-		token_url,
-		headers=headers,
-		data=body,
-		auth=(STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET)
-	)
-
-	#Parse the tokens!
-	response = client.parse_request_body_response(json.dumps(token_response.json()))
-	
-	print(response)
-
-	#Gather info on the athlete before loading hello.html
-	athlete = response["athlete"]
-	athlete_firstname = athlete["firstname"]
-	athlete_lastname = athlete["lastname"]
-	athlete_photo = athlete["profile"]
+	code = request.args.get("code")
+	#If this is the first time on this page...
+	if code:
+		#Exchange authorization code for a refresh token and short-lived access token
+		token_url, headers, body = client.prepare_token_request(
+			"https://www.strava.com/oauth/token",
+			#force HTTPS when creating callback URL (https://stackoverflow.com/questions/49071504/google-app-engine-flask-ssl-and-oauth2-problems)
+			#authorization_response=request.url.replace('http','https'),
+			#redirect_url=request.base_url,
+			redirect_url=request.path,
+			code=code,
+			#Note: this is where Strava token request differs from Google token request -
+			#Strava requires that the client_secret be included in the body of the POST,
+			#not just in the auth, presumably - 11/12/19
+			client_secret=STRAVA_CLIENT_SECRET
+		)
+		token_response = requests.post(
+			token_url,
+			headers=headers,
+			data=body,
+			auth=(STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET)
+		)
+		#Parse the tokens!
+		response = client.parse_request_body_response(json.dumps(token_response.json()))
+		#Add the response data to a dict athlete_info
+		athlete_info = {}
+		athlete = response["athlete"]
+		athlete_info["firstname"] = athlete["firstname"]
+		athlete_info["lastname"] = athlete["lastname"]
+		athlete_info["profile"] = athlete["profile"]
+		#Store the athlete_dict in Secret Manager as a string (temporarily)
+		add_secret_version('strava-mapper', fake_hash, str(athlete_info))
+		#Gather info on the athlete before loading hello.html
+		athlete = response["athlete"]
+		athlete_firstname = athlete["firstname"]
+		athlete_lastname = athlete["lastname"]
+		athlete_photo = athlete["profile"]
+	else:
+		#Grab the athlete_info stringified dict from Secret Manager, convert back to dict, and use that data to render hello.html
+		response_str = access_secret_version('strava-mapper', fake_hash, 'latest')
+		json_str = response_str.replace("'", "\"")
+		athlete = json.loads(json_str)
+		athlete_firstname = athlete["firstname"]
+		athlete_lastname = athlete["lastname"]
+		athlete_photo = athlete["profile"]
 	
 	#Load hello.html
 	return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
 
 @app.route("/routes", methods=['GET','POST'])
 def select_routes():
-	if request.method == 'POST':		
+	if request.method == 'POST':
 		start_year = int(request.form['start_year'])
 		start_month = int(request.form['start_month'])
 		end_year = int(request.form['end_year'])
