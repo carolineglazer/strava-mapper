@@ -38,10 +38,6 @@ client = WebApplicationClient(STRAVA_CLIENT_ID)
 
 @app.route("/")
 def index():
-	try:
-		create_secret('strava-mapper', fake_hash)
-	except:
-		pass
 	return render_template('index.html')
 
 @app.route("/login")
@@ -88,21 +84,20 @@ def callback():
 		athlete_info["lastname"] = athlete["lastname"]
 		athlete_info["profile"] = athlete["profile"]
 		#Store the athlete_dict in Secret Manager as a string (temporarily)
+		create_secret('strava-mapper', fake_hash)
 		add_secret_version('strava-mapper', fake_hash, str(athlete_info))
 		#Gather info on the athlete before loading hello.html
 		athlete = response["athlete"]
-		athlete_firstname = athlete["firstname"]
-		athlete_lastname = athlete["lastname"]
-		athlete_photo = athlete["profile"]
 	else:
 		#Grab the athlete_info stringified dict from Secret Manager, convert back to dict, and use that data to render hello.html
 		response_str = access_secret_version('strava-mapper', fake_hash, 'latest')
 		json_str = response_str.replace("'", "\"")
 		athlete = json.loads(json_str)
-		athlete_firstname = athlete["firstname"]
-		athlete_lastname = athlete["lastname"]
-		athlete_photo = athlete["profile"]
-	
+		
+	athlete_firstname = athlete["firstname"]
+	athlete_lastname = athlete["lastname"]
+	athlete_photo = athlete["profile"]
+
 	#Load hello.html
 	return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
 
