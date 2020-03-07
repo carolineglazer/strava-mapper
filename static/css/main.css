@@ -69,7 +69,10 @@ tr:hover {
 	padding: 10px;
 	border-radius: 5px;
 	border: none;
+	font-family: sans-serif;
     font-weight: bold;
+    font-size: medium;
+    text-decoration: none;
 }
 
 .button:hover {
