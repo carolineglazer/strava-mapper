@@ -115,6 +115,10 @@ tr:hover {
 	text-align: center;
 }
 
+#strava-link {
+	color: #FC4C02
+}
+
 .leaflet-popup-content-wrapper {
 	opacity: .9;
 }
