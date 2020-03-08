@@ -53,7 +53,6 @@ def login():
 def callback():
 	#Get authorization code Strava sends back with redirect uri
 	code = request.args.get("code")
-	print(code)
 	#If this is the first time on this page...
 	if code:
 		#Exchange authorization code for a refresh token and short-lived access token
