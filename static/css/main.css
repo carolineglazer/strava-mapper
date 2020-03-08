@@ -92,6 +92,10 @@ tr:hover {
 	width: 100%;
 }
 
+#index #strava-button {
+	width: 50%
+}
+
 #hello {
 	text-align: center;
 	background-color: #e1e1eb;
