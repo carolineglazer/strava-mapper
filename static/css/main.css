@@ -80,6 +80,18 @@ tr:hover {
 	cursor: pointer;
 }
 
+#index {
+	text-align: center;
+	background-color: #e1e1eb;
+	width: 50%;
+	margin: 5% auto;
+	padding: 5px 25px;
+}
+
+#index img {
+	width: 100%;
+}
+
 #hello {
 	text-align: center;
 	background-color: #e1e1eb;

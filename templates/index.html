@@ -6,7 +6,11 @@
 
 <body>
     <div id="index">
-        <img src="{{ url_for('images', filename='highlighted_route.jpg')}}">
-        <a class="button" href="/login">Login to Strava (this isn't sketchy)</a>
+        <h1>Every Single Route</h1>
+        <img src="{{ url_for('static', filename='images/highlighted_route.jpg')}}">
+        <p>
+            <a class="button" href="/login">Login to Strava (this isn't sketchy)</a>
+        </p>
+        <p>Created by <a href="https://carolineglazer.com">Caroline Glazer</a></p>
     </div>
 </body>
