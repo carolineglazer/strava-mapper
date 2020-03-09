@@ -23,8 +23,8 @@ import requests
 from access_secrets import access_secret_version, create_secret, add_secret_version
 
 #Configuration
-STRAVA_CLIENT_ID = access_secret_version('strava-mapper', 'strava-client-id', 'latest')
-STRAVA_CLIENT_SECRET = access_secret_version('strava-mapper', 'strava-client-secret', 'latest')
+STRAVA_CLIENT_ID = access_secret_version('everysingleroute', 'strava-client-id', 'latest')
+STRAVA_CLIENT_SECRET = access_secret_version('everysingleroute', 'strava-client-secret', 'latest')
 fake_hash=str(random.getrandbits(128))
 
 #set environment variable DEBUG to enable testing on localhost
@@ -83,13 +83,13 @@ def callback():
 		athlete_info["lastname"] = athlete["lastname"]
 		athlete_info["profile"] = athlete["profile"]
 		#Store the athlete_dict in Secret Manager as a string (temporarily)
-		create_secret('strava-mapper', fake_hash)
-		add_secret_version('strava-mapper', fake_hash, str(athlete_info))
+		create_secret('everysingleroute', fake_hash)
+		add_secret_version('everysingleroute', fake_hash, str(athlete_info))
 		#Set up for info gathering outside of this if statement
 		athlete = response["athlete"]
 	else:
 		#Grab the athlete_info stringified dict from Secret Manager, convert back to dict, and use that data to render hello.html
-		response_str = access_secret_version('strava-mapper', fake_hash, 'latest')
+		response_str = access_secret_version('everysingleroute', fake_hash, 'latest')
 		json_str = response_str.replace("'", "\"")
 		#Set up for info gathering outside of this else statement
 		athlete = json.loads(json_str)
@@ -120,7 +120,7 @@ def select_routes():
 		useractivities_endpoint = "https://www.strava.com/api/v3/athlete/activities"
 		uri, headers, body = client.add_token(useractivities_endpoint)
 		activity_ids = {}	
-		params = {'per_page':per_page, 'after':start, 'before':end}
+		params = {'per_page':per_page, 'after':start, 'before':end, 'page':1}
 		user_activities_response = requests.get(uri, headers=headers, data=body, params=params)
 	else:
 		return render_template('hello.html')
