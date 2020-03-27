@@ -20,7 +20,7 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 #Import secrets.py function to access secrets API
-from access_secrets import access_secret_version, create_secret, add_secret_version
+from access_secrets import access_secret_version, add_secret_version
 
 #Configuration
 STRAVA_CLIENT_ID = access_secret_version('everysingleroute', 'strava-client-id', 'latest')
@@ -76,7 +76,6 @@ def callback():
 	response = client.parse_request_body_response(json.dumps(token_response.json()))
 		
 	#Gather info on the athlete before loading hello.html
-	athlete_info = {}
 	athlete = response["athlete"]
 	athlete_firstname = athlete["firstname"]
 	athlete_lastname = athlete["lastname"]
