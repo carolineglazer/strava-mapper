@@ -82,7 +82,11 @@ def callback():
 	athlete_photo = athlete["profile"]
 
 	#Load hello.html
-	return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
+	try:
+		return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
+	except:
+		return render_template('oops.html')
+
 
 @app.route("/routes", methods=['GET','POST'])
 def select_routes():
@@ -112,7 +116,10 @@ def select_routes():
 	for i in user_activities:
 		activity_ids[str(i["id"])] = str(i["name"])
 	
-	return render_template('routes.html', activity_ids=activity_ids)
+	try:
+		return render_template('routes.html', activity_ids=activity_ids)
+	except:
+		return render_template('oops.html')
 
 @app.route("/displayroutes", methods=['GET','POST'])
 def displayroutes():
@@ -142,7 +149,10 @@ def displayroutes():
 			except:
 				pass
 
-		return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
-
+		try:
+			return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
+		except:
+			return render_template('oops.html')
+			
 if __name__ == '__main__':
 	app.run()
