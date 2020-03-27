@@ -80,6 +80,16 @@ tr:hover {
 	cursor: pointer;
 }
 
+#oops {
+	text-align: center;
+	margin: 5% auto;
+}
+
+#oops img {
+	height: 80%;
+	margin: 0 0 10 0;
+}
+
 #index {
 	text-align: center;
 	width: 80%;
