@@ -37,27 +37,21 @@ app = Flask(__name__)
 client = WebApplicationClient(STRAVA_CLIENT_ID)
 
 @app.route("/")
-try:
-	def index():
-		return render_template('index.html')
-except:
-	return render_template('oops.html')
+def index():
+	return render_template('index.html')
 
 @app.route("/login")
-try:
-	def login():
-		#Use library to construct the request for Strava login and provide scopes
-		request_uri = client.prepare_request_uri(
-			"https://www.strava.com/oauth/authorize",
-			redirect_uri=request.base_url + "/callback",
-			scope=["activity:read"])
-		return redirect(request_uri)
-except:
-	return render_template('oops.html')
+def login():
+	#Use library to construct the request for Strava login and provide scopes
+	request_uri = client.prepare_request_uri(
+		"https://www.strava.com/oauth/authorize",
+		redirect_uri=request.base_url + "/callback",
+		scope=["activity:read"])
+	return redirect(request_uri)
 
 @app.route("/login/callback")
-try:
-	def callback():
+def callback():
+	try:
 		#Get authorization code Strava sends back with redirect uri
 		code = request.args.get("code")
 		#Exchange authorization code for a refresh token and short-lived access token
@@ -90,14 +84,12 @@ try:
 
 		#Load hello.html
 		return render_template('hello.html', athlete_firstname=athlete_firstname, athlete_lastname=athlete_lastname, athlete_photo=athlete_photo)
-	
-except:
-	return render_template('oops.html')
-
+	except:
+		return render_template('oops.html')
 
 @app.route("/routes", methods=['GET','POST'])
-try:
-	def select_routes():
+def select_routes():
+	try:
 		if request.method == 'POST':
 			start_year = int(request.form['start_year'])
 			start_month = int(request.form['start_month'])
@@ -124,14 +116,13 @@ try:
 		for i in user_activities:
 			activity_ids[str(i["id"])] = str(i["name"])
 		
-		return render_template('routes.html', activity_ids=activity_ids)`
-
-except:
-	return render_template('oops.html')
+		return render_template('routes.html', activity_ids=activity_ids)
+	except:
+		return render_template('oops.html')
 
 @app.route("/displayroutes", methods=['GET','POST'])
-try:
-	def displayroutes():
+def displayroutes():
+	try:
 		if request.method == 'POST':
 			selected_ids = list(request.form.items())
 
@@ -157,10 +148,10 @@ try:
 					selected_dates[str(activity["id"])] = activity["start_date"][5:7]+"/"+activity["start_date"][8:10]+"/"+activity["start_date"][:4]
 				except:
 					pass
-			return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
 
-except:
-	return render_template('oops.html')
+			return render_template('displayroutes.html', selected_routes=selected_routes, names=selected_names, dist=selected_dist, vert=selected_vert, dates=selected_dates)
+	except:
+		return render_template('oops.html')
 
 if __name__ == '__main__':
 	app.run()
